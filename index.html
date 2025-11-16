@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI & Programming Jobs | Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6; /* Professional light gray background */
+            color: #333;
+            padding-top: 70px; /* For fixed navbar */
+        }
+        .navbar {
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+        }
+        .hero {
+            background: url('https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') no-repeat center center;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Kept overlay */
+        }
+        .hero h1, .hero p { position: relative; z-index: 1; }
+        .section {
+            background: white;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 8px; /* Slightly sharper edges */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            max-width: 900px;
+            /* Professional Fade-in Animation */
+            animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .image-container img { width: 100%; height: auto; border-radius: 5px; max-height: 350px; object-fit: cover; }
+        .image-caption { font-size: 0.9em; color: #666; margin-top: 5px; text-align: center; }
+        .video-container { text-align: center; margin: 20px 0; }
+        .video-container iframe { width: 100%; height: 315px; border-radius: 5px; }
+        .video-caption { font-size: 0.9em; color: #666; margin-top: 5px; }
+        .key-points { list-style-type: disc; padding-left: 20px; }
+        .highlight { background: #fff3cd; padding: 10px; border-radius: 5px; margin: 10px 0; }
+        a.internal-link { color: #0056b3; text-decoration: underline; }
+        a.internal-link:hover { color: #003d7c; }
+        footer {
+            background: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">AI & Programming Jobs</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Intro</a></li>
+                    <li class="nav-item"><a class="nav-link" href="limitations.html">AI Limits</a></li>
+                    <li class="nav-item"><a class="nav-link" href="legal.html">Legal</a></li>
+                    <li class="nav-item"><a class="nav-link" href="leverage.html">Leverage AI</a></li>
+                    <li class="nav-item"><a class="nav-link" href="history.html">History</a></li>
+                    <li class="nav-item"><a class="nav-link" href="quiz.html">Quiz & Game</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="hero" class="hero">
+        <h1>Is AI Going to Take Over Your Programming Job?</h1>
+        <p>Explore the realities of AI in programming through this interactive research paper by Tody Liang.</p>
+        <p>Written Communication I | Final Draft | 10/27/2025</p>
+    </div>
+
+    <div class="container">
+        <section id="introduction" class="section">
+            <h2>The AI Scenario</h2>
+            <div class="image-container">
+                <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="AI Chatbot Generating Code">
+                <div class="image-caption">Image: AI Chatbot Generating Code. Source: Unsplash.</div>
+            </div>
+            <p>Imagine using ChatGPT to build a gaming website. It spits out code instantly, sparking fears of AI replacing programmers. Headlines show layoffs at companies like Duolingo and Intel, but experts say it's often cost-cutting, not AI alone. <a href="limitations.html" class="internal-link">Learn why AI won't fully replace jobs</a>.</p>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/7I0BJyebaek" title="How to Code with ChatGPT: Complete Guide" allowfullscreen></iframe>
+                <div class="video-caption">Video: How to Code with ChatGPT. Source: YouTube.</div>
+            </div>
+            <div class="highlight">
+                <strong>Key Insight:</strong> AI won't fully replace programmers—here's why.
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Tody Liang. This is a fictional research paper for educational purposes.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // No JS needed for this specific page, but the file is here for quiz.html
+    </script>
+
+</body>
+</html>
