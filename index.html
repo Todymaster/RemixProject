@@ -3,125 +3,597 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI & Programming Jobs | Home</title>
+    <title>Is AI Going to Take Over Your Programming Job? | Interactive Research Paper</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #00f260;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6; /* Professional light gray background */
+            /* Default Animated Gradient */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #6B21A8 100%);
+            background-size: 200% 200%;
+            animation: animated-gradient 10s ease-in-out infinite;
             color: #333;
-            padding-top: 70px; /* For fixed navbar */
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
         }
-        .navbar {
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+
+        /* Matrix Canvas (Hidden by default) */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind everything */
+            display: none;
+            background: black;
         }
+
+        @keyframes animated-gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- Glitch Effect on Hover --- */
+        h2 {
+            position: relative;
+            display: inline-block;
+        }
+        h2:hover {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: var(--primary-color);
+        }
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        /* --- Typing Effect --- */
+        .typing-effect {
+            overflow: hidden;
+            border-right: .15em solid orange;
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .15em;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: orange; } }
+
+        /* --- Hero Section --- */
         .hero {
             background: url('https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') no-repeat center center;
             background-size: cover;
             color: white;
             text-align: center;
-            padding: 100px 20px;
+            padding: 120px 20px;
             position: relative;
+            overflow: hidden;
         }
         .hero::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.5); /* Kept overlay */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
         }
-        .hero h1, .hero p { position: relative; z-index: 1; }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- Content Cards --- */
         .section {
-            background: white;
-            margin: 30px auto;
-            padding: 30px;
-            border-radius: 8px; /* Slightly sharper edges */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background: rgba(255, 255, 255, 0.95); /* Slight transparency for Matrix mode */
+            margin: 40px auto;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             max-width: 900px;
-            /* Professional Fade-in Animation */
-            animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            
+            /* Scroll Animation setup */
+            opacity: 0; /* Start hidden */
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        /* --- Game: Bug Squash --- */
+        #bug-game-area {
+            width: 100%;
+            height: 300px;
+            background-color: #222;
+            border: 2px solid #444;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: crosshair;
+            display: none; /* Hidden until started */
         }
-        .image-container img { width: 100%; height: auto; border-radius: 5px; max-height: 350px; object-fit: cover; }
-        .image-caption { font-size: 0.9em; color: #666; margin-top: 5px; text-align: center; }
-        .video-container { text-align: center; margin: 20px 0; }
-        .video-container iframe { width: 100%; height: 315px; border-radius: 5px; }
-        .video-caption { font-size: 0.9em; color: #666; margin-top: 5px; }
-        .key-points { list-style-type: disc; padding-left: 20px; }
-        .highlight { background: #fff3cd; padding: 10px; border-radius: 5px; margin: 10px 0; }
-        a.internal-link { color: #0056b3; text-decoration: underline; }
-        a.internal-link:hover { color: #003d7c; }
-        footer {
-            background: #343a40;
+        .bug {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            font-size: 30px;
+            cursor: pointer;
+            user-select: none;
+            animation: wiggle 0.5s infinite;
+            transition: transform 0.1s;
+        }
+        .bug:active {
+            transform: scale(0);
+        }
+        @keyframes wiggle {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .game-ui {
+            display: flex;
+            justify-content: space-between;
+            background: #333;
             color: white;
+            padding: 10px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        /* --- General UI --- */
+        .expandable {
+            cursor: pointer;
+            color: var(--primary-color);
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .expandable-content {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f1f1f1;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .video-container iframe {
+            width: 100%;
+            height: 350px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* --- Quiz & Confetti --- */
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            z-index: 999;
+        }
+        .result { margin-top: 15px; padding: 10px; border-radius: 5px; display: none; font-weight: bold; }
+        .correct { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .incorrect { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        footer {
+            background: #1a1a1a;
+            color: #aaa;
             text-align: center;
-            padding: 20px;
-            margin-top: 40px;
+            padding: 40px;
+            margin-top: 50px;
+            border-top: 3px solid var(--primary-color);
         }
     </style>
 </head>
 <body>
-    
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+
+    <canvas id="matrix-canvas"></canvas>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">AI & Programming Jobs</a>
+            <a class="navbar-brand" href="#hero">🤖 AI vs Devs</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Intro</a></li>
-                    <li class="nav-item"><a class="nav-link" href="limitations.html">AI Limits</a></li>
-                    <li class="nav-item"><a class="nav-link" href="legal.html">Legal</a></li>
-                    <li class="nav-item"><a class="nav-link" href="leverage.html">Leverage AI</a></li>
-                    <li class="nav-item"><a class="nav-link" href="history.html">History</a></li>
-                    <li class="nav-item"><a class="nav-link" href="quiz.html">Quiz & Game</a></li>
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="#introduction">Intro</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#ai-limitations">Limits</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#game-section">Games</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#quiz">Quiz</a></li>
+                    <li class="nav-item ms-3">
+                        <button class="btn btn-outline-success btn-sm" onclick="toggleMatrix()">🕶️ Matrix Mode</button>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <div id="hero" class="hero">
-        <h1>Is AI Going to Take Over Your Programming Job?</h1>
-        <p>Explore the realities of AI in programming through this interactive research paper by Tody Liang.</p>
-        <p>Written Communication I | Final Draft | 10/27/2025</p>
+        <div class="hero-content container">
+            <h1 class="display-4 fw-bold typing-effect" style="max-width: fit-content; margin: 0 auto;">Is AI Taking Your Job?</h1>
+            <p class="lead mt-3">A deep dive into the future of programming.</p>
+            <p>Written Communication I | Final Draft | 10/27/2025</p>
+            <a href="#introduction" class="btn btn-light btn-lg mt-4 shadow-lg">Start Research</a>
+        </div>
     </div>
 
     <div class="container">
         <section id="introduction" class="section">
             <h2>The AI Scenario</h2>
-            <div class="image-container">
-                <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="AI Chatbot Generating Code">
-                <div class="image-caption">Image: AI Chatbot Generating Code. Source: Unsplash.</div>
-            </div>
-            <p>Imagine using ChatGPT to build a gaming website. It spits out code instantly, sparking fears of AI replacing programmers. Headlines show layoffs at companies like Duolingo and Intel, but experts say it's often cost-cutting, not AI alone. <a href="limitations.html" class="internal-link">Learn why AI won't fully replace jobs</a>.</p>
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/7I0BJyebaek" title="How to Code with ChatGPT: Complete Guide" allowfullscreen></iframe>
-                <div class="video-caption">Video: How to Code with ChatGPT. Source: YouTube.</div>
-            </div>
-            <div class="highlight">
-                <strong>Key Insight:</strong> AI won't fully replace programmers—here's why.
+            <p class="lead">Imagine asking an AI to build a website. It happens instantly. Does this mean the end of the human programmer?</p>
+            
+            <div class="row align-items-center mt-4">
+                <div class="col-md-6">
+                    <p>Headlines scream about layoffs at tech giants. But experts argue this is cost-cutting, not just AI. The reality is nuanced: AI is a powerful engine, but it needs a driver.</p>
+                    <div class="alert alert-info">
+                        <strong>Key Insight:</strong> AI generates code, but humans generate value.
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/7I0BJyebaek" title="How to Code with ChatGPT" allowfullscreen></iframe>
+                    </div>
+                </div>
             </div>
         </section>
+
+        <section id="ai-limitations" class="section">
+            <h2>Why AI Fails: The Bug Problem</h2>
+            <p>AI lacks "common sense." It hallucinates solutions that look right but fail to run. It introduces bugs that are hard to find.</p>
+            
+            <div class="card border-danger mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="m-0">👾 Mini-Game: Debug The Code!</h5>
+                </div>
+                <div class="card-body text-center">
+                    <p>AI just generated some messy code full of bugs. <strong>Click the bugs to squash them before time runs out!</strong></p>
+                    
+                    <div id="game-intro">
+                        <button class="btn btn-danger btn-lg" onclick="startBugGame()">Start Debugging</button>
+                    </div>
+
+                    <div id="game-ui" class="game-ui" style="display:none;">
+                        <span>Score: <span id="score">0</span>/10</span>
+                        <span>Time: <span id="timer">15</span>s</span>
+                    </div>
+                    <div id="bug-game-area"></div>
+                    <div id="game-over-msg" class="mt-2 fw-bold"></div>
+                </div>
+            </div>
+
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/BuxezLdrt9Y" title="AI Debugging Tool" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <section id="legal-issues" class="section">
+            <h2>Legal & Ethical Nightmares</h2>
+            <div class="row">
+                <div class="col-md-5">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="img-fluid rounded shadow" alt="Legal Documents">
+                </div>
+                <div class="col-md-7">
+                    <p>AI models are trained on open-source code without asking. Is this fair use or theft?</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">⚖️ <strong>Copyright:</strong> Can you copyright code an AI wrote? (Likely no).</li>
+                        <li class="list-group-item">🔒 <strong>Security:</strong> AI might accidentally leak private API keys it learned from training data.</li>
+                        <li class="list-group-item">👨‍⚖️ <strong>Lawsuits:</strong> GitHub Copilot is already facing class-action lawsuits.</li>
+                    </ul>
+                </div>
+            </div>
+             <div class="mt-3 text-center">
+                 <p class="expandable" onclick="toggleContent('legal-vid')">Show Related Video</p>
+                 <div id="legal-vid" class="expandable-content">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/Jy11NvVLzRo" title="AI Copyright Law Issues" allowfullscreen></iframe>
+                    </div>
+                 </div>
+             </div>
+        </section>
+
+        <section id="game-section" class="section">
+            <h2>Simulation: Manage a Project</h2>
+            <p>You are the Lead Developer. Choose how to use AI in your workflow.</p>
+            
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div id="sim-start">
+                        <h5>Task: Build a Login System</h5>
+                        <p>How do you proceed?</p>
+                        <button class="btn btn-primary m-1" onclick="runSim('full-ai')">Ask AI to write the whole thing</button>
+                        <button class="btn btn-dark m-1" onclick="runSim('manual')">Write it all yourself (No AI)</button>
+                        <button class="btn btn-success m-1" onclick="runSim('hybrid')">Write the logic, ask AI for the UI</button>
+                    </div>
+                    
+                    <div id="sim-result" class="mt-3 p-3 rounded" style="display:none;"></div>
+                    <button id="sim-reset" class="btn btn-sm btn-outline-secondary mt-2" style="display:none;" onclick="resetSim()">Restart Simulation</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="quiz" class="section">
+            <h2>Test Your Knowledge</h2>
+            
+            <div class="quiz-container">
+                <div class="mb-4 border-bottom pb-3" id="q1">
+                    <p class="fw-bold">1. Why does AI often fail at complex coding tasks?</p>
+                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q1', false)">It's too slow</button>
+                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q1', true)">It lacks common sense/context</button>
+                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q1', false)">It refuses to work</button>
+                    <div class="result"></div>
+                </div>
+
+                <div class="mb-4 border-bottom pb-3" id="q2">
+                    <p class="fw-bold">2. What is the best way to use AI currently?</p>
+                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q2', false)">Let it do 100% of the work</button>
+                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q2', false)">Ignore it completely</button>
+                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q2', true)">As an assistant for debugging/boilerplate</button>
+                    <div class="result"></div>
+                </div>
+
+                <div class="mb-4" id="q3">
+                    <p class="fw-bold">3. What historical invention is AI compared to?</p>
+                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q3', true)">Autopilot</button>
+                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q3', false)">The Toaster</button>
+                    <div class="result"></div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="references" class="section">
+            <h3>References</h3>
+            <ul class="small text-muted">
+                <li>Brookes, R. (2023). Autopilot systems. *Aviation Today*.</li>
+                <li>Siedsma, T. (2024). AI hallucinations and debugging. *AI Perspectives*.</li>
+                <li>Vincent, J. (2022). *GitHub Copilot lawsuit*. The Verge.</li>
+            </ul>
+        </section>
+
     </div>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Tody Liang. This is a fictional research paper for educational purposes.</p>
-        </div>
+        <p>&copy; 2025 Tody Liang. Created for Written Communication I.</p>
+        <p class="small">Built with HTML5, Bootstrap, and pure JavaScript.</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // No JS needed for this specific page, but the file is here for quiz.html
-    </script>
+        /* --- 1. SCROLL ANIMATIONS --- */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
 
+        document.querySelectorAll('.section').forEach((el) => observer.observe(el));
+
+        /* --- 2. TOGGLE CONTENT --- */
+        function toggleContent(id) {
+            const el = document.getElementById(id);
+            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        }
+
+        /* --- 3. MATRIX MODE --- */
+        let matrixInterval;
+        let isMatrixOn = false;
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function toggleMatrix() {
+            isMatrixOn = !isMatrixOn;
+            if (isMatrixOn) {
+                canvas.style.display = 'block';
+                startMatrix();
+                document.body.style.background = 'black'; // Override gradient
+            } else {
+                canvas.style.display = 'none';
+                clearInterval(matrixInterval);
+                document.body.style.background = ''; // Reset to CSS gradient
+            }
+        }
+
+        function startMatrix() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const letters = "010101HTMLCSSJAVA<>{}[]AIROBOT";
+            const fontSize = 16;
+            const columns = canvas.width / fontSize;
+            const drops = Array(Math.floor(columns)).fill(1);
+
+            function draw() {
+                ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; // Fade effect
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#0F0"; // Green text
+                ctx.font = fontSize + "px monospace";
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = letters[Math.floor(Math.random() * letters.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            clearInterval(matrixInterval);
+            matrixInterval = setInterval(draw, 33);
+        }
+
+        /* --- 4. BUG SQUASH MINI-GAME --- */
+        let score = 0;
+        let timeLeft = 15;
+        let gameTimer;
+        let spawnTimer;
+        const gameArea = document.getElementById('bug-game-area');
+        const scoreEl = document.getElementById('score');
+        const timerEl = document.getElementById('timer');
+        const gameOverMsg = document.getElementById('game-over-msg');
+        const gameIntro = document.getElementById('game-intro');
+        const gameUi = document.getElementById('game-ui');
+
+        function startBugGame() {
+            score = 0;
+            timeLeft = 15;
+            scoreEl.innerText = score;
+            timerEl.innerText = timeLeft;
+            gameOverMsg.innerHTML = '';
+            gameArea.innerHTML = ''; // Clear old bugs
+            
+            gameIntro.style.display = 'none';
+            gameArea.style.display = 'block';
+            gameUi.style.display = 'flex';
+
+            // Spawn bugs every 600ms
+            spawnTimer = setInterval(spawnBug, 600);
+            
+            // Countdown
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                timerEl.innerText = timeLeft;
+                if (timeLeft <= 0) endBugGame();
+            }, 1000);
+        }
+
+        function spawnBug() {
+            const bug = document.createElement('div');
+            bug.classList.add('bug');
+            bug.innerText = '🐞';
+            // Random position
+            bug.style.top = Math.random() * (gameArea.clientHeight - 40) + 'px';
+            bug.style.left = Math.random() * (gameArea.clientWidth - 40) + 'px';
+            
+            bug.onclick = function() {
+                score++;
+                scoreEl.innerText = score;
+                // Visual pop effect
+                this.style.transform = 'scale(1.5)';
+                this.style.opacity = '0';
+                setTimeout(() => this.remove(), 100);
+                
+                if(score >= 10) endBugGame(true);
+            };
+            
+            gameArea.appendChild(bug);
+            // Auto remove bug after 2 seconds if not clicked
+            setTimeout(() => { if(bug.parentNode) bug.remove(); }, 2000);
+        }
+
+        function endBugGame(win = false) {
+            clearInterval(gameTimer);
+            clearInterval(spawnTimer);
+            gameArea.innerHTML = '';
+            
+            if (win) {
+                gameOverMsg.innerHTML = `<span class="text-success">🎉 You Win! You squashed ${score} bugs!</span>`;
+                triggerConfetti(gameOverMsg);
+            } else {
+                gameOverMsg.innerHTML = `<span class="text-danger">💀 Game Over! You ran out of time.</span>`;
+            }
+            
+            setTimeout(() => {
+                gameIntro.style.display = 'block';
+                gameArea.style.display = 'none';
+                gameUi.style.display = 'none';
+            }, 3000);
+        }
+
+        /* --- 5. TEXT SIMULATION --- */
+        function runSim(choice) {
+            document.getElementById('sim-start').style.display = 'none';
+            const res = document.getElementById('sim-result');
+            const reset = document.getElementById('sim-reset');
+            res.style.display = 'block';
+            reset.style.display = 'block';
+
+            if (choice === 'full-ai') {
+                res.className = "mt-3 p-3 rounded bg-warning";
+                res.innerHTML = "<strong>Result:</strong> The code was generated in seconds! But wait... the login button doesn't work on mobile, and the database connection is insecure. You spend 3 days fixing it.";
+            } else if (choice === 'manual') {
+                res.className = "mt-3 p-3 rounded bg-info text-white";
+                res.innerHTML = "<strong>Result:</strong> The code is clean and works perfectly. However, it took you 5 days to write, and your boss is asking why it took so long.";
+            } else {
+                res.className = "mt-3 p-3 rounded bg-success text-white";
+                res.innerHTML = "<strong>Result: Perfect Balance!</strong> You wrote the secure logic yourself, and used AI to generate the boring HTML forms instantly. Project finished in 2 days with no bugs.";
+                triggerConfetti(res);
+            }
+        }
+
+        function resetSim() {
+            document.getElementById('sim-start').style.display = 'block';
+            document.getElementById('sim-result').style.display = 'none';
+            document.getElementById('sim-reset').style.display = 'none';
+        }
+
+        /* --- 6. QUIZ & CONFETTI --- */
+        function checkQuiz(btn, qId, isCorrect) {
+            const parent = document.getElementById(qId);
+            const result = parent.querySelector('.result');
+            const allBtns = parent.querySelectorAll('button');
+            
+            allBtns.forEach(b => b.disabled = true); // Disable buttons
+
+            if (isCorrect) {
+                result.innerHTML = "✅ Correct!";
+                result.className = "result correct";
+                result.style.display = "block";
+                triggerConfetti(btn);
+            } else {
+                result.innerHTML = "❌ Incorrect. Try reading the section again.";
+                result.className = "result incorrect";
+                result.style.display = "block";
+            }
+        }
+
+        function triggerConfetti(element) {
+            const rect = element.getBoundingClientRect();
+            const center = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 };
+            
+            for(let i=0; i<40; i++) {
+                const conf = document.createElement('div');
+                conf.classList.add('confetti-piece');
+                conf.style.left = center.x + 'px';
+                conf.style.top = (center.y + window.scrollY) + 'px';
+                conf.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                
+                // Random physics
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = 5 + Math.random() * 10;
+                const tx = Math.cos(angle) * 150;
+                const ty = Math.sin(angle) * 150;
+
+                conf.animate([
+                    { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
+                    { transform: `translate(${tx}px, ${ty}px) rotate(720deg)`, opacity: 0 }
+                ], {
+                    duration: 1000 + Math.random() * 1000,
+                    easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
+                }).onfinish = () => conf.remove();
+                
+                document.body.appendChild(conf);
+            }
+        }
+    </script>
 </body>
 </html>
