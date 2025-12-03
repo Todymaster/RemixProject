@@ -3,597 +3,698 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Is AI Going to Take Over Your Programming Job? | Interactive Research Paper</title>
+    <title>Is AI Going to Take Over Your Programming Job? | System Analysis</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --accent-color: #00f260;
+            --primary: #00f3ff;
+            --secondary: #bc13fe;
+            --candy: #ff00ff;
+            --dark-bg: #030305;
+            --glass: rgba(10, 10, 16, 0.95);
+            --glass-border: rgba(0, 243, 255, 0.3);
+            --text-glow: 0 0 10px rgba(0, 243, 255, 0.5);
+            --shadow-glow: 0 0 20px rgba(188, 19, 254, 0.5);
         }
 
+        html { scroll-behavior: smooth; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Default Animated Gradient */
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #6B21A8 100%);
-            background-size: 200% 200%;
-            animation: animated-gradient 10s ease-in-out infinite;
-            color: #333;
-            margin: 0;
-            padding: 0;
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: #f0f0f0;
+            font-size: 1.15rem;
+            cursor: none;
             overflow-x: hidden;
         }
 
-        /* Matrix Canvas (Hidden by default) */
-        #matrix-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1; /* Behind everything */
-            display: none;
-            background: black;
+        /* --- CUSTOM CURSOR --- */
+        #cursor {
+            width: 25px; height: 25px; border: 2px solid var(--primary); border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.1s;
+            mix-blend-mode: difference; box-shadow: 0 0 15px var(--primary);
         }
+        #cursor.hovered { transform: scale(3.5); background: rgba(0, 243, 255, 0.1); border-color: var(--secondary); }
 
-        @keyframes animated-gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* --- Glitch Effect on Hover --- */
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, h4 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; color: #fff; }
         h2 {
-            position: relative;
-            display: inline-block;
+            border-bottom: 3px solid var(--secondary); display: inline-block; padding-bottom: 10px; margin-bottom: 40px;
+            text-shadow: var(--text-glow);
         }
-        h2:hover {
-            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
-            color: var(--primary-color);
-        }
-        @keyframes glitch {
-            0% { transform: translate(0) }
-            20% { transform: translate(-2px, 2px) }
-            40% { transform: translate(-2px, -2px) }
-            60% { transform: translate(2px, 2px) }
-            80% { transform: translate(2px, -2px) }
-            100% { transform: translate(0) }
-        }
+        strong { color: var(--primary); font-weight: 700; }
 
-        /* --- Typing Effect --- */
-        .typing-effect {
-            overflow: hidden;
-            border-right: .15em solid orange;
-            white-space: nowrap;
-            margin: 0 auto;
-            letter-spacing: .15em;
-            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
-        }
-        @keyframes typing { from { width: 0 } to { width: 100% } }
-        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: orange; } }
+        /* --- NAVIGATION --- */
+        .navbar { background: rgba(3, 3, 5, 0.95); border-bottom: 1px solid var(--glass-border); padding: 15px 0; backdrop-filter: blur(10px); }
+        .navbar-brand { color: var(--primary) !important; text-shadow: var(--text-glow); font-weight: 900; letter-spacing: 2px; }
+        .nav-link { color: #ccc !important; font-size: 0.9rem; transition: 0.3s; }
+        .nav-link:hover { color: var(--primary) !important; text-shadow: var(--text-glow); }
 
-        /* --- Hero Section --- */
+        /* --- HERO SECTION --- */
         .hero {
-            background: url('https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') no-repeat center center;
-            background-size: cover;
-            color: white;
-            text-align: center;
-            padding: 120px 20px;
-            position: relative;
-            overflow: hidden;
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            position: relative; background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
+            background-size: cover; background-attachment: fixed;
         }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-        }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.75); z-index: 1; }
         .hero-content {
-            position: relative;
-            z-index: 2;
+            position: relative; z-index: 2; padding: 40px; border: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); border-radius: 20px; box-shadow: 0 0 50px rgba(0,0,0,0.8);
         }
+        .hero h1 { font-size: 4rem; text-shadow: 0 0 20px var(--primary); margin-bottom: 20px; font-weight: 900; }
 
-        /* --- Content Cards --- */
-        .section {
-            background: rgba(255, 255, 255, 0.95); /* Slight transparency for Matrix mode */
-            margin: 40px auto;
-            padding: 35px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            max-width: 900px;
-            
-            /* Scroll Animation setup */
-            opacity: 0; /* Start hidden */
-            transform: translateY(50px);
-            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        /* --- GLASS CARDS --- */
+        .glass-card {
+            background: var(--glass); backdrop-filter: blur(10px); border: 1px solid var(--glass-border);
+            border-radius: 12px; padding: 40px; margin-bottom: 80px; box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            opacity: 0; transform: translateY(50px); transition: all 0.8s ease;
         }
+        .glass-card.visible { opacity: 1; transform: translateY(0); }
+        .glass-card:hover { border-color: var(--primary); box-shadow: var(--shadow-glow); }
 
-        .section.visible {
-            opacity: 1;
-            transform: translateY(0);
+        /* --- BUTTONS --- */
+        .btn-cyber {
+            background: rgba(0, 243, 255, 0.1); border: 1px solid var(--primary); color: var(--primary);
+            padding: 15px 40px; font-family: 'Orbitron', sans-serif; letter-spacing: 2px; transition: 0.4s;
+            text-transform: uppercase; font-weight: bold;
         }
-
-        .section:hover {
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-        }
-
-        /* --- Game: Bug Squash --- */
-        #bug-game-area {
-            width: 100%;
-            height: 300px;
-            background-color: #222;
-            border: 2px solid #444;
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: crosshair;
-            display: none; /* Hidden until started */
-        }
-        .bug {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            font-size: 30px;
-            cursor: pointer;
-            user-select: none;
-            animation: wiggle 0.5s infinite;
-            transition: transform 0.1s;
-        }
-        .bug:active {
-            transform: scale(0);
-        }
-        @keyframes wiggle {
-            0% { transform: rotate(0deg); }
-            25% { transform: rotate(10deg); }
-            50% { transform: rotate(0deg); }
-            75% { transform: rotate(-10deg); }
-            100% { transform: rotate(0deg); }
-        }
-        .game-ui {
-            display: flex;
-            justify-content: space-between;
-            background: #333;
-            color: white;
-            padding: 10px;
-            border-radius: 8px 8px 0 0;
-        }
-
-        /* --- General UI --- */
-        .expandable {
-            cursor: pointer;
-            color: var(--primary-color);
-            font-weight: bold;
-            text-decoration: underline;
-        }
-        .expandable-content {
-            display: none;
-            margin-top: 15px;
-            padding: 15px;
-            background: #f1f1f1;
-            border-left: 4px solid var(--primary-color);
-        }
+        .btn-cyber:hover { background: var(--primary); color: #000; box-shadow: 0 0 30px var(--primary); }
         
-        .video-container iframe {
-            width: 100%;
-            height: 350px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        .btn-sparkle {
+            background: linear-gradient(45deg, var(--secondary), var(--primary)); border: none; color: white;
+            padding: 10px 25px; font-family: 'Orbitron', sans-serif; font-weight: bold; position: relative; overflow: hidden;
         }
-        
-        /* --- Quiz & Confetti --- */
-        .confetti-piece {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            z-index: 999;
+        .btn-sparkle::after {
+            content: '✨'; position: absolute; top: -10px; right: -10px; font-size: 20px; animation: sparkle 2s infinite;
         }
-        .result { margin-top: 15px; padding: 10px; border-radius: 5px; display: none; font-weight: bold; }
-        .correct { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .incorrect { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        @keyframes sparkle { 0% { transform: rotate(0deg) scale(1); opacity: 1; } 100% { transform: rotate(360deg) scale(1.5); opacity: 0; } }
 
-        footer {
-            background: #1a1a1a;
-            color: #aaa;
-            text-align: center;
-            padding: 40px;
-            margin-top: 50px;
-            border-top: 3px solid var(--primary-color);
+        /* --- CITATION BOX --- */
+        .citation {
+            border-left: 4px solid var(--secondary); background: rgba(255,255,255,0.05);
+            padding: 15px; margin-top: 20px; font-style: italic; color: #aaa;
+        }
+
+        /* --- IMAGES --- */
+        .content-img {
+            width: 100%; border-radius: 10px; border: 1px solid var(--glass-border);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); margin-bottom: 20px; transition: 0.3s;
+        }
+        .content-img:hover { border-color: var(--primary); box-shadow: 0 0 30px var(--primary); }
+
+        /* --- GAME STYLES --- */
+        .game-container {
+            height: 400px; background: #111; position: relative; overflow: hidden;
+            border: 1px solid #333; border-radius: 8px;
+        }
+        .scraper {
+            position: absolute; color: #ff0000; font-size: 24px; transition: top 0.1s linear; cursor: crosshair; z-index: 20;
+        }
+        .sort-box {
+            border: 2px dashed #555; height: 150px; display: flex; align-items: center; justify-content: center; transition: 0.3s;
+        }
+        .sort-box:hover { border-color: var(--primary); background: rgba(0,243,255,0.05); }
+
+        /* --- CHAT INTERFACE (Gemini) --- */
+        .chat-box {
+            height: 300px; overflow-y: auto; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border);
+            border-radius: 10px; padding: 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;
+        }
+        .chat-msg {
+            padding: 10px 15px; border-radius: 10px; max-width: 80%; font-size: 0.95rem; animation: popIn 0.3s ease;
+        }
+        .user-msg { align-self: flex-end; background: rgba(0, 243, 255, 0.2); border: 1px solid var(--primary); color: #fff; }
+        .ai-msg { align-self: flex-start; background: rgba(188, 19, 254, 0.2); border: 1px solid var(--secondary); color: #e0e0e0; }
+        .ai-typing { color: var(--primary); font-style: italic; font-size: 0.8rem; margin-left: 10px; display: none; }
+
+        /* --- CARD FLIP --- */
+        .flip-card { background-color: transparent; width: 100%; height: 250px; perspective: 1000px; }
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.8s; transform-style: preserve-3d;
+        }
+        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back {
+            position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden;
+            backface-visibility: hidden; border-radius: 15px; display: flex; align-items: center;
+            justify-content: center; flex-direction: column; border: 1px solid var(--glass-border);
+        }
+        .flip-card-front { background-color: rgba(0,0,0,0.6); }
+        .flip-card-back { background-color: rgba(188, 19, 254, 0.2); transform: rotateY(180deg); border-color: var(--secondary); }
+
+        /* --- SLIDER --- */
+        input[type="range"] {
+            -webkit-appearance: none; width: 100%; height: 10px; background: #333; border-radius: 5px; outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 25px; height: 25px; background: var(--primary);
+            border-radius: 50%; cursor: pointer; box-shadow: 0 0 15px var(--primary);
+        }
+
+        /* --- QUIZ & STAT BARS --- */
+        .stat-label { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .stat-bar { height: 12px; border-radius: 6px; background: rgba(255,255,255,0.1); overflow: hidden; }
+        .stat-fill { height: 100%; background: linear-gradient(90deg, var(--secondary), var(--primary)); transition: width 1.5s ease-out; }
+        .quiz-btn { width: 100%; text-align: left; padding: 15px 20px; margin-bottom: 10px; background: rgba(255,255,255,0.08); border: 1px solid #333; transition: 0.3s; color: white; }
+        .quiz-btn:hover { border-color: var(--primary); padding-left: 30px; background: rgba(0, 243, 255, 0.15); }
+        .quiz-btn.correct { background: rgba(0, 255, 0, 0.2); border-color: #0f0; }
+        .quiz-btn.wrong { background: rgba(255, 0, 0, 0.2); border-color: #f00; }
+
+        /* --- MODALS --- */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center;
+            backdrop-filter: blur(10px);
+        }
+        .modal-content {
+            background: linear-gradient(135deg, #1a0b2e 0%, #000 100%);
+            border: 2px solid var(--secondary); border-radius: 20px; padding: 40px; text-align: center;
+            box-shadow: 0 0 50px var(--secondary); animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 500px; width: 90%; color: white;
+        }
+        @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* --- BACKGROUND CANVAS --- */
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; }
+        
+        .code-input {
+            width: 100%; background: #111; color: #0f0; border: 1px solid #333; padding: 15px; font-family: monospace; border-radius: 5px; resize: vertical; min-height: 150px;
+        }
+        .audit-result {
+            margin-top: 15px; padding: 15px; border-left: 3px solid var(--primary); background: rgba(0, 243, 255, 0.05); white-space: pre-wrap;
         }
     </style>
 </head>
 <body>
 
-    <canvas id="matrix-canvas"></canvas>
+    <!-- SETTINGS MODAL -->
+    <div id="settings-modal" class="modal-overlay" onclick="closeSettings()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 class="mb-4"><i class="fas fa-cog"></i> API SETTINGS</h3>
+            <p class="text-start small text-muted mb-2">Enter your Gemini API Key to enable the real AI features. If left blank, the system will run in Simulation Mode.</p>
+            <input type="password" id="user-api-key" class="form-control bg-dark text-white mb-3" placeholder="Paste Gemini API Key here...">
+            <div class="d-flex gap-2 justify-content-center">
+                <button class="btn btn-outline-danger" onclick="clearKey()">CLEAR</button>
+                <button class="btn btn-sparkle" onclick="saveKey()">SAVE & REBOOT</button>
+            </div>
+            <p class="mt-3 small text-success" id="key-status" style="display:none;">Key Saved!</p>
+        </div>
+    </div>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <!-- CANDY PRIZE MODAL -->
+    <div id="candy-modal" class="modal-overlay" onclick="closeCandy()">
+        <div class="modal-content" onclick="event.stopPropagation()" style="border-color: var(--candy); box-shadow: 0 0 50px var(--candy);">
+            <div style="font-size: 5rem; animation: bounce 2s infinite; display: inline-block;">🍬</div>
+            <h2 style="color: var(--candy);">ACHIEVEMENT UNLOCKED!</h2>
+            <p class="lead mb-4">You have mastered this concept.</p>
+            <div class="alert alert-warning text-black fw-bold">
+                📢 ACTION REQUIRED:<br>Raise your hand and ask Tody for a piece of candy!
+            </div>
+            <button class="btn btn-outline-light mt-3" onclick="closeCandy()">CONTINUE RESEARCH</button>
+        </div>
+    </div>
+
+    <div id="cursor"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#hero">🤖 AI vs Devs</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <a class="navbar-brand" href="#"><i class="fas fa-brain me-2"></i>TODY LIANG</a>
+            <div class="d-flex gap-3 align-items-center">
+                <button class="btn btn-sm btn-outline-secondary interactive-hover" onclick="openSettings()"><i class="fas fa-cog"></i></button>
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="fas fa-bars text-white"></span>
+                </button>
+            </div>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="#introduction">Intro</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#ai-limitations">Limits</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#game-section">Games</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#quiz">Quiz</a></li>
-                    <li class="nav-item ms-3">
-                        <button class="btn btn-outline-success btn-sm" onclick="toggleMatrix()">🕶️ Matrix Mode</button>
-                    </li>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link interactive-hover" href="#intro">GENESIS</a></li>
+                    <li class="nav-item"><a class="nav-link interactive-hover" href="#debate">DEBATE</a></li>
+                    <li class="nav-item"><a class="nav-link interactive-hover" href="#science">ACCURACY</a></li>
+                    <li class="nav-item"><a class="nav-link interactive-hover" href="#limitations">GLITCHES</a></li>
+                    <li class="nav-item"><a class="nav-link interactive-hover" href="#skills">SKILLS</a></li>
+                    <li class="nav-item"><a class="nav-link interactive-hover" href="#legal">DEFENSE</a></li>
+                    <li class="nav-item"><a class="nav-link interactive-hover" href="#quiz">EXAM</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div id="hero" class="hero">
-        <div class="hero-content container">
-            <h1 class="display-4 fw-bold typing-effect" style="max-width: fit-content; margin: 0 auto;">Is AI Taking Your Job?</h1>
-            <p class="lead mt-3">A deep dive into the future of programming.</p>
-            <p>Written Communication I | Final Draft | 10/27/2025</p>
-            <a href="#introduction" class="btn btn-light btn-lg mt-4 shadow-lg">Start Research</a>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="display-1">IS AI TAKING<br>YOUR JOB?</h1>
+            <p class="mb-5 lead text-white">SYSTEM ANALYSIS: REPLACEMENT OR EVOLUTION?</p>
+            <a href="#intro" class="btn btn-cyber interactive-hover">INITIATE RESEARCH</a>
         </div>
-    </div>
+    </section>
 
-    <div class="container">
-        <section id="introduction" class="section">
-            <h2>The AI Scenario</h2>
-            <p class="lead">Imagine asking an AI to build a website. It happens instantly. Does this mean the end of the human programmer?</p>
-            
-            <div class="row align-items-center mt-4">
+    <div class="container" style="margin-top: -50px; position: relative; z-index: 10;">
+
+        <!-- Intro -->
+        <section id="intro" class="glass-card visible">
+            <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p>Headlines scream about layoffs at tech giants. But experts argue this is cost-cutting, not just AI. The reality is nuanced: AI is a powerful engine, but it needs a driver.</p>
-                    <div class="alert alert-info">
-                        <strong>Key Insight:</strong> AI generates code, but humans generate value.
-                    </div>
+                    <h2><i class="fas fa-terminal me-3"></i>The Scenario</h2>
+                    <p>Headlines recently showed massive layoffs at companies like <strong>Duolingo</strong> and <strong>Intel</strong>. Experts argue this shift is about **cost-cutting**, not just AI capability. The fear is real, but the data suggests a different story.</p>
+                    <p>The reality is nuanced. While AI spits out code instantly, <strong>Hodges (2025)</strong> notes that AI lacks "common sense," often solving the wrong problem entirely. It requires a human "pilot" to steer it.</p>
+                    <div class="citation">"Headlines show layoffs at companies like Duolingo and Intel, but experts say it's often cost-cutting, not AI alone." (Liang, 2025)</div>
                 </div>
                 <div class="col-md-6">
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/7I0BJyebaek" title="How to Code with ChatGPT" allowfullscreen></iframe>
+                    <div class="ratio ratio-16x9 border border-primary rounded shadow">
+                        <iframe src="https://www.youtube.com/embed/7I0BJyebaek" allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="ai-limitations" class="section">
-            <h2>Why AI Fails: The Bug Problem</h2>
-            <p>AI lacks "common sense." It hallucinates solutions that look right but fail to run. It introduces bugs that are hard to find.</p>
+        <!-- ✨ GEMINI DEBATE FEATURE -->
+        <section id="debate" class="glass-card">
+            <h2><i class="fas fa-comments me-3"></i>The Devil's Advocate</h2>
+            <p class="mb-4">Do you believe humans are essential? <strong class="text-secondary">Challenge the AI.</strong> The system below is programmed to argue that "AI WILL replace you." Can you win the debate?</p>
             
-            <div class="card border-danger mb-4">
-                <div class="card-header bg-danger text-white">
-                    <h5 class="m-0">👾 Mini-Game: Debug The Code!</h5>
-                </div>
-                <div class="card-body text-center">
-                    <p>AI just generated some messy code full of bugs. <strong>Click the bugs to squash them before time runs out!</strong></p>
-                    
-                    <div id="game-intro">
-                        <button class="btn btn-danger btn-lg" onclick="startBugGame()">Start Debugging</button>
-                    </div>
-
-                    <div id="game-ui" class="game-ui" style="display:none;">
-                        <span>Score: <span id="score">0</span>/10</span>
-                        <span>Time: <span id="timer">15</span>s</span>
-                    </div>
-                    <div id="bug-game-area"></div>
-                    <div id="game-over-msg" class="mt-2 fw-bold"></div>
-                </div>
+            <div class="chat-box" id="debate-chat">
+                <div class="chat-msg ai-msg"><strong>🤖 AI System:</strong> I can write 10,000 lines of code in the time it takes you to sip your coffee. Why do you think you are still necessary?</div>
             </div>
-
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/BuxezLdrt9Y" title="AI Debugging Tool" allowfullscreen></iframe>
-            </div>
-        </section>
-
-        <section id="legal-issues" class="section">
-            <h2>Legal & Ethical Nightmares</h2>
-            <div class="row">
-                <div class="col-md-5">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="img-fluid rounded shadow" alt="Legal Documents">
-                </div>
-                <div class="col-md-7">
-                    <p>AI models are trained on open-source code without asking. Is this fair use or theft?</p>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">⚖️ <strong>Copyright:</strong> Can you copyright code an AI wrote? (Likely no).</li>
-                        <li class="list-group-item">🔒 <strong>Security:</strong> AI might accidentally leak private API keys it learned from training data.</li>
-                        <li class="list-group-item">👨‍⚖️ <strong>Lawsuits:</strong> GitHub Copilot is already facing class-action lawsuits.</li>
-                    </ul>
-                </div>
-            </div>
-             <div class="mt-3 text-center">
-                 <p class="expandable" onclick="toggleContent('legal-vid')">Show Related Video</p>
-                 <div id="legal-vid" class="expandable-content">
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/Jy11NvVLzRo" title="AI Copyright Law Issues" allowfullscreen></iframe>
-                    </div>
-                 </div>
-             </div>
-        </section>
-
-        <section id="game-section" class="section">
-            <h2>Simulation: Manage a Project</h2>
-            <p>You are the Lead Developer. Choose how to use AI in your workflow.</p>
-            
-            <div class="card bg-light">
-                <div class="card-body">
-                    <div id="sim-start">
-                        <h5>Task: Build a Login System</h5>
-                        <p>How do you proceed?</p>
-                        <button class="btn btn-primary m-1" onclick="runSim('full-ai')">Ask AI to write the whole thing</button>
-                        <button class="btn btn-dark m-1" onclick="runSim('manual')">Write it all yourself (No AI)</button>
-                        <button class="btn btn-success m-1" onclick="runSim('hybrid')">Write the logic, ask AI for the UI</button>
-                    </div>
-                    
-                    <div id="sim-result" class="mt-3 p-3 rounded" style="display:none;"></div>
-                    <button id="sim-reset" class="btn btn-sm btn-outline-secondary mt-2" style="display:none;" onclick="resetSim()">Restart Simulation</button>
-                </div>
-            </div>
-        </section>
-
-        <section id="quiz" class="section">
-            <h2>Test Your Knowledge</h2>
-            
-            <div class="quiz-container">
-                <div class="mb-4 border-bottom pb-3" id="q1">
-                    <p class="fw-bold">1. Why does AI often fail at complex coding tasks?</p>
-                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q1', false)">It's too slow</button>
-                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q1', true)">It lacks common sense/context</button>
-                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q1', false)">It refuses to work</button>
-                    <div class="result"></div>
-                </div>
-
-                <div class="mb-4 border-bottom pb-3" id="q2">
-                    <p class="fw-bold">2. What is the best way to use AI currently?</p>
-                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q2', false)">Let it do 100% of the work</button>
-                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q2', false)">Ignore it completely</button>
-                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q2', true)">As an assistant for debugging/boilerplate</button>
-                    <div class="result"></div>
-                </div>
-
-                <div class="mb-4" id="q3">
-                    <p class="fw-bold">3. What historical invention is AI compared to?</p>
-                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q3', true)">Autopilot</button>
-                    <button class="btn btn-outline-primary btn-sm m-1" onclick="checkQuiz(this, 'q3', false)">The Toaster</button>
-                    <div class="result"></div>
-                </div>
+            <div class="ai-typing" id="debate-typing">AI is generating response...</div>
+            <div class="input-group mt-3">
+                <input type="text" id="debate-input" class="form-control bg-dark text-white border-secondary" placeholder="Type your argument here...">
+                <button class="btn btn-sparkle" onclick="sendDebate()">DEBATE ✨</button>
             </div>
         </section>
         
-        <section id="references" class="section">
-            <h3>References</h3>
-            <ul class="small text-muted">
-                <li>Brookes, R. (2023). Autopilot systems. *Aviation Today*.</li>
-                <li>Siedsma, T. (2024). AI hallucinations and debugging. *AI Perspectives*.</li>
-                <li>Vincent, J. (2022). *GitHub Copilot lawsuit*. The Verge.</li>
+        <!-- Scientific Accuracy (Purdue Study) & Efficiency Paradox -->
+        <section id="science" class="glass-card">
+            <h2><i class="fas fa-microscope me-3"></i>Scientific Accuracy</h2>
+            <p>Can we trust the machine? A landmark study by <strong>Purdue University</strong> analyzed ChatGPT's reliability in programming tasks. The results were alarming and highlight the dangers of blind trust.</p>
+            
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" alt="Data Analysis" class="content-img">
+                    <h4 class="text-danger mb-4">The Failure Rate</h4>
+                    <div class="mb-4">
+                        <div class="stat-label"><span>Incorrect Answers</span> <span class="text-danger">52%</span></div>
+                        <div class="stat-bar"><div class="stat-fill bg-danger" style="width: 52%; background: #ff4444;"></div></div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="stat-label"><span>Verbose/Bloated Code</span> <span class="text-warning">77%</span></div>
+                        <div class="stat-bar"><div class="stat-fill bg-warning" style="width: 77%; background: #ffbb33;"></div></div>
+                    </div>
+                    <p class="text-muted small">Despite this, users preferred AI answers 35% of the time because they were "polite." (Purdue Study)</p>
+                </div>
+                <div class="col-md-6 border-start border-secondary ps-md-5">
+                    <h4 class="text-primary">The Efficiency Paradox</h4>
+                    <p>AI writes fast, but debugging AI hallucinations takes longer (Siedsma, 2024). Test the trade-off:</p>
+                    
+                    <div class="p-3 border border-primary rounded mt-3" style="background: rgba(0,0,0,0.3);">
+                        <label class="form-label text-muted">Adjust AI Usage Level:</label>
+                        <input type="range" class="form-range mb-4" id="aiSlider" min="0" max="100" value="50" oninput="updateEfficiency(this.value)">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <h3 class="text-success" id="writeSpeed">50%</h3>
+                                <small>SPEED</small>
+                            </div>
+                            <div class="col-6">
+                                <h3 class="text-danger" id="debugTime">50%</h3>
+                                <small>DEBUG TIME</small>
+                            </div>
+                        </div>
+                        <p class="text-center mt-3 text-white small" id="slider-msg">Balanced approach.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="citation">"52% of ChatGPT answers are incorrect... yet users preferred them 35% of the time due to polite language." (Purdue Study)</div>
+        </section>
+
+        <!-- Limitations & Bug Game + ✨ GEMINI AUDITOR -->
+        <section id="limitations" class="glass-card">
+            <h2><i class="fas fa-bug me-3"></i>System Failures</h2>
+            <p><strong>Siedsma (2024)</strong> warns of "hallucinations"—where AI claims it fixed an issue, but hasn't. The Purdue study confirms this.</p>
+            
+            <ul class="nav nav-tabs border-secondary mb-3" id="limitTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active bg-transparent text-secondary border-0" id="game-tab" data-bs-toggle="tab" data-bs-target="#tab-game" type="button" onclick="playSound('click')">MINIGAME</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link bg-transparent text-primary border-0" id="audit-tab" data-bs-toggle="tab" data-bs-target="#tab-audit" type="button" onclick="playSound('click')">✨ AI HALLUCINATION AUDITOR</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link bg-transparent text-white border-0" id="video-tab" data-bs-toggle="tab" data-bs-target="#tab-video" type="button" onclick="playSound('click')">📺 VIDEO EVIDENCE</button>
+                </li>
             </ul>
+
+            <div class="tab-content" id="limitTabContent">
+                <!-- Tab 1: Game -->
+                <div class="tab-pane fade show active" id="tab-game" role="tabpanel">
+                    <div class="card bg-transparent border-secondary mt-3">
+                        <div class="card-header border-secondary text-white d-flex justify-content-between align-items-center" style="background: rgba(0,0,0,0.5);">
+                            <span class="h5 m-0"><i class="fas fa-gamepad me-2"></i>DEBUG PROTOCOL</span>
+                            <span class="badge bg-danger">LEVEL <span id="bug-level-indicator">1</span></span>
+                        </div>
+                        <div class="card-body p-0 position-relative">
+                            <div id="bug-game-intro" class="text-center p-5 d-flex flex-column align-items-center justify-content-center" style="height: 400px; background: rgba(0,0,0,0.6);">
+                                <i class="fas fa-virus fa-4x mb-3 text-danger"></i>
+                                <h4>NEURAL NETWORK COMPROMISED</h4>
+                                <p>Eliminate the hallucinations (Siedsma, 2024) to win a prize!</p>
+                                <button class="btn btn-cyber interactive-hover mt-3" onclick="startBugGame()">INITIATE</button>
+                            </div>
+                            <div id="bug-game-area" style="display:none; height: 400px; background: #111; position: relative; overflow: hidden;"></div>
+                            <div id="bug-game-ui" class="position-absolute top-0 start-0 w-100 p-2 d-flex justify-content-between bg-dark bg-opacity-75" style="display:none;">
+                                <span>SCORE: <span id="bug-score" class="text-info">0</span></span>
+                                <span>TIME: <span id="bug-timer" class="text-danger">15</span>s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Gemini Auditor -->
+                <div class="tab-pane fade" id="tab-audit" role="tabpanel">
+                    <p class="text-info small">Paste code below. The AI will audit it for "hallucinations" and "bloat" as per the Purdue Study.</p>
+                    <textarea id="audit-input" class="code-input" placeholder="// Paste suspicious code here... or click 'Load Sample' to test."></textarea>
+                    <div class="d-flex gap-2 mt-3">
+                        <button class="btn btn-sparkle" onclick="runAudit()">AUDIT CODE ✨</button>
+                        <button class="btn btn-outline-secondary" onclick="loadSampleCode()">Load Sample</button>
+                    </div>
+                    <div id="audit-loading" class="ai-typing mt-2">Analyzing syntax patterns...</div>
+                    <div id="audit-output" class="audit-result" style="display:none;"></div>
+                </div>
+
+                <!-- Tab 3: Video -->
+                <div class="tab-pane fade" id="tab-video" role="tabpanel">
+                    <div class="ratio ratio-16x9 border border-secondary mt-3">
+                        <iframe src="https://www.youtube.com/embed/BuxezLdrt9Y" allowfullscreen></iframe>
+                    </div>
+                    <p class="text-muted small mt-2">Video: Demonstrating AI Hallucinations in real-time.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Junior Trap & Human Edge -->
+        <section id="skills" class="glass-card">
+            <div class="row">
+                <div class="col-lg-12 mb-5">
+                    <h2><i class="fas fa-baby-carriage me-3"></i>The Junior Developer Trap</h2>
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop" alt="Junior Devs" class="content-img" style="height: 300px; object-fit: cover;">
+                    <p>A dangerous paradox: Senior developers use AI to become 10x faster (Levin, 2025), but Junior developers relying on it fail to build the "mental muscle" needed for debugging (Duranton, 2024). They become dependent on a tool that is statistically unreliable without oversight.</p>
+                    <ul class="list-unstyled mt-3 ps-3 border-start border-primary">
+                        <li class="mb-2"><i class="fas fa-exclamation-triangle text-warning me-2"></i> <strong>Skill Gap:</strong> Skipping the struggle of learning means missing the intuition needed to fix complex bugs.</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> <strong>Solution:</strong> Use AI as a tutor, not a solver. Read every line of code it generates.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                     <h4 class="text-primary text-center mb-4">Human vs Machine (Brookes, 2023)</h4>
+                     <div class="flip-card interactive-hover">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fas fa-robot fa-3x text-primary mb-3"></i>
+                                <h4>AI STRENGTH</h4>
+                                <p class="mt-3">Tap to reveal.</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <h5>BOILERPLATE & SYNTAX</h5>
+                                <p>Generating repetitive code instantly.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card interactive-hover mt-3">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fas fa-brain fa-3x text-secondary mb-3"></i>
+                                <h4>HUMAN STRENGTH</h4>
+                                <p class="mt-3">Tap to reveal.</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <h5>CONTEXT & ETHICS</h5>
+                                <p>Understanding client needs and business logic.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h4 class="text-secondary text-center mb-4">GAME: COGNITIVE SORT</h4>
+                    <div id="sort-game-area" class="border border-secondary rounded p-3 h-100 d-flex flex-column justify-content-center bg-dark">
+                        <div id="sort-intro" class="text-center">
+                            <i class="fas fa-random fa-3x mb-3 text-secondary"></i>
+                            <p>Categorize tasks correctly to win!</p>
+                            <button class="btn btn-cyber interactive-hover" onclick="startSortGame()">START SORTING</button>
+                        </div>
+                        <div id="sort-game-ui" style="display:none; text-align: center;">
+                            <div class="card bg-secondary text-white mb-4 p-4 mx-auto" style="width: 80%;">
+                                <h3 id="current-task">TASK LOADING...</h3>
+                            </div>
+                            <div class="row g-2 px-3">
+                                <div class="col-6">
+                                    <button class="btn btn-outline-primary w-100 py-3 interactive-hover" onclick="sortTask('ai')"><i class="fas fa-robot"></i> AI</button>
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-outline-light w-100 py-3 interactive-hover" onclick="sortTask('human')"><i class="fas fa-brain"></i> HUMAN</button>
+                                </div>
+                            </div>
+                            <div id="sort-feedback" class="mt-3 fw-bold"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Legal -->
+        <section id="legal" class="glass-card">
+            <h2><i class="fas fa-gavel me-3"></i>Legal Protocols</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Dryka (2025)</strong> notes AI trains on public repositories. <strong>Vincent (2022)</strong> reported on the lawsuit <em>Doe v. GitHub</em> regarding Copilot copying code without credit. This raises the issue of "Ethical Debt"—using tools built on potentially stolen labor.</p>
+                    <div class="ratio ratio-16x9 border border-secondary mt-3 rounded">
+                        <iframe src="https://www.youtube.com/embed/Jy11NvVLzRo" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-4 border border-warning rounded h-100 d-flex flex-column justify-content-center" style="background: rgba(20,20,0,0.2);">
+                        <h4 class="text-center text-warning mb-4">ACTIVITY: COPYRIGHT COURT</h4>
+                        <p class="text-center text-white small">You are the judge. Is this infringement?</p>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6"><div class="p-2 bg-dark border border-secondary rounded font-monospace text-muted small">HUMAN:<br>fn x(y){return y*2}</div></div>
+                            <div class="col-6"><div class="p-2 bg-dark border border-primary rounded font-monospace text-info small">AI:<br>fn x(a){return a*2}</div></div>
+                        </div>
+                        <div class="text-center" id="court-ui">
+                            <button class="btn btn-outline-success me-2 interactive-hover btn-sm" onclick="judgeCourt('fair')">FAIR USE</button>
+                            <button class="btn btn-outline-danger interactive-hover btn-sm" onclick="judgeCourt('guilty')">INFRINGEMENT</button>
+                        </div>
+                        <div id="court-result" class="text-center mt-2 fw-bold text-white" style="display:none;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="border border-danger p-1 rounded">
+                        <div class="game-container" id="defense-game-area" style="height: 300px;">
+                            <div id="defense-intro" class="h-100 w-100 d-flex flex-column justify-content-center align-items-center bg-dark bg-opacity-75 position-absolute top-0 start-0" style="z-index:10;">
+                                <i class="fas fa-database fa-3x text-danger mb-3"></i>
+                                <h5>PROTECT THE REPO</h5>
+                                <p class="small text-muted">Win for a prize!</p>
+                                <button class="btn btn-cyber interactive-hover btn-sm" onclick="startDefenseGame()">DEFEND</button>
+                            </div>
+                            <div id="defense-ui" class="position-absolute top-0 w-100 p-2 d-flex justify-content-between text-white" style="z-index:5;">
+                                <span>SCORE: <span id="def-score">0</span></span>
+                                <span>HP: <span id="def-health">100%</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Assessment -->
+        <section id="quiz" class="glass-card">
+            <div class="text-center">
+                <h2><i class="fas fa-graduation-cap me-3"></i>Final Assessment</h2>
+                <p class="mb-4">Prove your understanding. Score high for a sweet reward!</p>
+                <div class="progress mb-4 bg-dark" style="height: 10px;">
+                    <div class="progress-bar bg-primary" id="quiz-progress" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="start-quiz-btn" class="text-center py-5">
+                <button class="btn btn-cyber interactive-hover" onclick="startQuiz()">START EXAMINATION</button>
+            </div>
+            
+            <div id="quiz-container" style="display:none;"></div>
+            
+            <div id="quiz-results" class="text-center py-5" style="display:none;">
+                <h1 class="display-1 text-primary fw-bold mb-2" id="final-score"></h1>
+                <h3 class="text-white mb-4" id="final-rank"></h3>
+                <p class="text-muted mb-4" id="final-msg"></p>
+                <button class="btn btn-cyber interactive-hover" onclick="location.reload()">REBOOT SYSTEM</button>
+            </div>
         </section>
 
     </div>
 
-    <footer>
-        <p>&copy; 2025 Tody Liang. Created for Written Communication I.</p>
-        <p class="small">Built with HTML5, Bootstrap, and pure JavaScript.</p>
+    <footer class="text-center p-5 mt-5 border-top border-secondary" style="background: #020204;">
+        <p class="text-muted">&copy; 2025 TODY LIANG | WRITTEN COMMUNICATION I</p>
     </footer>
 
     <script>
-        /* --- 1. SCROLL ANIMATIONS --- */
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+        /* --- SOUND ENGINE --- */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
+            
+            if(type === 'hover') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(400, now);
+                gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                osc.start(now); osc.stop(now + 0.1);
+            } else if (type === 'click') {
+                osc.type = 'square'; osc.frequency.setValueAtTime(600, now); osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
+                gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                osc.start(now); osc.stop(now + 0.1);
+            } else if (type === 'win') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(400, now); osc.frequency.linearRampToValueAtTime(800, now + 0.2);
+                gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.5);
+                osc.start(now); osc.stop(now + 0.5);
+            } else if (type === 'error') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); osc.frequency.linearRampToValueAtTime(100, now + 0.2);
+                gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
+            }
+        }
+
+        // Attach sounds to buttons
+        document.addEventListener('mouseover', e => {
+            if(e.target.classList.contains('interactive-hover') || e.target.tagName === 'BUTTON') playSound('hover');
+        });
+        document.addEventListener('click', e => {
+            if(e.target.classList.contains('interactive-hover') || e.target.tagName === 'BUTTON') playSound('click');
+        });
+
+        /* --- GEMINI API INTEGRATION & SETTINGS --- */
+        const envApiKey = ""; 
+        function getApiKey() { return localStorage.getItem('gemini_api_key') || envApiKey; }
+        function openSettings() { document.getElementById('settings-modal').style.display = 'flex'; }
+        function closeSettings() { document.getElementById('settings-modal').style.display = 'none'; }
+        function saveKey() {
+            const val = document.getElementById('user-api-key').value.trim();
+            if(val) { localStorage.setItem('gemini_api_key', val); document.getElementById('key-status').style.display = 'block'; setTimeout(() => location.reload(), 1000); }
+        }
+        function clearKey() { localStorage.removeItem('gemini_api_key'); location.reload(); }
+
+        async function callGemini(prompt, systemInstruction = "") {
+            const apiKey = getApiKey();
+            if (!apiKey) {
+                console.warn("API Key missing - Using Simulation Mode");
+                await new Promise(r => setTimeout(r, 1500));
+                if(systemInstruction.includes("advocate")) {
+                    const responses = ["I process millions of operations while you sleep.", "Biological brains are limited by fatigue.", "Efficiency is the only metric that matters.", "You make typos. I make history."];
+                    return responses[Math.floor(Math.random() * responses.length)];
+                } else if (systemInstruction.includes("Code Reviewer")) {
+                    return `**⚠️ AUDIT REPORT (SIMULATED):**\n\n1. **Hallucination:** 'utils.calculateFlux()' does not exist.\n2. **Security:** Raw input usage detected.\n3. **Bloat:** 77% verbose (Purdue Study).\n\n*Verdict: Needs human review.*`;
                 }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.section').forEach((el) => observer.observe(el));
-
-        /* --- 2. TOGGLE CONTENT --- */
-        function toggleContent(id) {
-            const el = document.getElementById(id);
-            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
-        }
-
-        /* --- 3. MATRIX MODE --- */
-        let matrixInterval;
-        let isMatrixOn = false;
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-
-        function toggleMatrix() {
-            isMatrixOn = !isMatrixOn;
-            if (isMatrixOn) {
-                canvas.style.display = 'block';
-                startMatrix();
-                document.body.style.background = 'black'; // Override gradient
-            } else {
-                canvas.style.display = 'none';
-                clearInterval(matrixInterval);
-                document.body.style.background = ''; // Reset to CSS gradient
+                return "System Offline. Using fallback protocols.";
             }
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = { contents: [{ parts: [{ text: prompt }] }], systemInstruction: { parts: [{ text: systemInstruction }] } };
+            try {
+                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                const data = await response.json();
+                if (data.error) return "API Error: " + data.error.message;
+                return data.candidates[0].content.parts[0].text;
+            } catch (error) { return "Network Error: " + error.message; }
         }
 
-        function startMatrix() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            const letters = "010101HTMLCSSJAVA<>{}[]AIROBOT";
-            const fontSize = 16;
-            const columns = canvas.width / fontSize;
-            const drops = Array(Math.floor(columns)).fill(1);
-
-            function draw() {
-                ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; // Fade effect
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = "#0F0"; // Green text
-                ctx.font = fontSize + "px monospace";
-
-                for (let i = 0; i < drops.length; i++) {
-                    const text = letters[Math.floor(Math.random() * letters.length)];
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-            }
-            clearInterval(matrixInterval);
-            matrixInterval = setInterval(draw, 33);
+        /* --- FEATURE 1: DEBATE BOT --- */
+        async function sendDebate() {
+            const input = document.getElementById('debate-input'); const chatBox = document.getElementById('debate-chat'); const typing = document.getElementById('debate-typing');
+            const userText = input.value.trim(); if(!userText) return;
+            chatBox.innerHTML += `<div class="chat-msg user-msg"><strong>You:</strong> ${userText}</div>`;
+            input.value = ''; chatBox.scrollTop = chatBox.scrollHeight; typing.style.display = 'block';
+            const systemPrompt = "You are a staunch, slightly arrogant AI advocate. Debate the user on AI replacing programmers. Keep responses under 2 sentences. Be witty.";
+            const aiResponse = await callGemini(userText, systemPrompt);
+            typing.style.display = 'none';
+            chatBox.innerHTML += `<div class="chat-msg ai-msg"><strong>🤖 AI System:</strong> ${aiResponse}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+            playSound('click');
         }
 
-        /* --- 4. BUG SQUASH MINI-GAME --- */
-        let score = 0;
-        let timeLeft = 15;
-        let gameTimer;
-        let spawnTimer;
-        const gameArea = document.getElementById('bug-game-area');
-        const scoreEl = document.getElementById('score');
-        const timerEl = document.getElementById('timer');
-        const gameOverMsg = document.getElementById('game-over-msg');
-        const gameIntro = document.getElementById('game-intro');
-        const gameUi = document.getElementById('game-ui');
+        /* --- FEATURE 2: CODE AUDITOR --- */
+        function loadSampleCode() { document.getElementById('audit-input').value = `function calculateTotal(p) {\n  // This function is perfect\n  var x = p * 1.5;\n  return x;\n}`; }
+        async function runAudit() {
+            const code = document.getElementById('audit-input').value; const output = document.getElementById('audit-output'); const loading = document.getElementById('audit-loading');
+            if(!code) return;
+            loading.style.display = 'block'; output.style.display = 'none';
+            const systemPrompt = "You are a harsh Senior Code Reviewer. Audit this code for hallucinations and verbosity based on the Purdue Study. Output a short structured critique.";
+            const critique = await callGemini(code, systemPrompt);
+            loading.style.display = 'none'; output.style.display = 'block';
+            output.innerHTML = marked.parse(critique);
+            playSound('win');
+        }
+        const marked = { parse: t => t.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>') };
 
-        function startBugGame() {
-            score = 0;
-            timeLeft = 15;
-            scoreEl.innerText = score;
-            timerEl.innerText = timeLeft;
-            gameOverMsg.innerHTML = '';
-            gameArea.innerHTML = ''; // Clear old bugs
-            
-            gameIntro.style.display = 'none';
-            gameArea.style.display = 'block';
-            gameUi.style.display = 'flex';
+        /* --- VISUALS --- */
+        function showCandyPrize() { document.getElementById('candy-modal').style.display = 'flex'; triggerConfetti(); playSound('win'); }
+        function closeCandy() { document.getElementById('candy-modal').style.display = 'none'; }
 
-            // Spawn bugs every 600ms
-            spawnTimer = setInterval(spawnBug, 600);
-            
-            // Countdown
-            gameTimer = setInterval(() => {
-                timeLeft--;
-                timerEl.innerText = timeLeft;
-                if (timeLeft <= 0) endBugGame();
-            }, 1000);
+        document.addEventListener('DOMContentLoaded', () => { initParticles(); animateParticles(); });
+        const canvas = document.getElementById('bg-canvas'); const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        let particles = [];
+        function initParticles() { particles = []; for(let i=0; i<60; i++) particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*2, speedX: (Math.random()-0.5)*0.5, speedY: (Math.random()-0.5)*0.5, color: Math.random()>0.5 ? '#00f3ff' : '#bc13fe' }); }
+        function animateParticles() { ctx.clearRect(0,0,canvas.width, canvas.height); particles.forEach(p => { p.x += p.speedX; p.y += p.speedY; if(p.x<0||p.x>canvas.width) p.speedX*=-1; if(p.y<0||p.y>canvas.height) p.speedY*=-1; ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill(); }); requestAnimationFrame(animateParticles); }
+        const cursor = document.getElementById('cursor'); document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+        document.addEventListener('mouseover', e => { if(e.target.classList.contains('interactive-hover') || e.target.tagName === 'BUTTON') cursor.classList.add('hovered'); else cursor.classList.remove('hovered'); });
+        const observer = new IntersectionObserver(e => { e.forEach(en => { if(en.isIntersecting) en.target.classList.add('visible'); }); }, { threshold: 0.1 });
+        document.querySelectorAll('.glass-card').forEach(el => observer.observe(el));
+
+        /* --- SLIDER --- */
+        function updateEfficiency(val) {
+            document.getElementById('writeSpeed').innerText = val + "%"; document.getElementById('debugTime').innerText = val + "%";
+            const msg = document.getElementById('slider-msg');
+            if(val > 80) { msg.innerText = "HIGH DEBT (Duranton, 2024)"; msg.className = "text-center mt-3 text-danger small"; playSound('error'); }
+            else if(val < 20) { msg.innerText = "TOO SLOW"; msg.className = "text-center mt-3 text-warning small"; }
+            else { msg.innerText = "OPTIMAL BALANCE"; msg.className = "text-center mt-3 text-success small"; }
         }
 
-        function spawnBug() {
-            const bug = document.createElement('div');
-            bug.classList.add('bug');
-            bug.innerText = '🐞';
-            // Random position
-            bug.style.top = Math.random() * (gameArea.clientHeight - 40) + 'px';
-            bug.style.left = Math.random() * (gameArea.clientWidth - 40) + 'px';
-            
-            bug.onclick = function() {
-                score++;
-                scoreEl.innerText = score;
-                // Visual pop effect
-                this.style.transform = 'scale(1.5)';
-                this.style.opacity = '0';
-                setTimeout(() => this.remove(), 100);
-                
-                if(score >= 10) endBugGame(true);
-            };
-            
-            gameArea.appendChild(bug);
-            // Auto remove bug after 2 seconds if not clicked
-            setTimeout(() => { if(bug.parentNode) bug.remove(); }, 2000);
-        }
+        /* --- BUG GAME --- */
+        let bugScore = 0; let bugLevel = 1; let bugTimer = 15; let bugInterval, spawnInterval;
+        function startBugGame() { document.getElementById('bug-game-intro').style.display = 'none'; document.getElementById('bug-game-ui').style.display = 'flex'; document.getElementById('bug-game-area').style.display = 'block'; bugScore = 0; bugLevel = 1; bugTimer = 15; updateBugUI(); bugInterval = setInterval(() => { bugTimer--; updateBugUI(); if(bugTimer <= 0) endBugGame(false); }, 1000); spawnInterval = setInterval(spawnBug, 800); }
+        function spawnBug() { const area = document.getElementById('bug-game-area'); const bug = document.createElement('i'); bug.className = `fas fa-bug bug position-absolute text-${Math.random()>0.5?'danger':'warning'}`; bug.style.fontSize = '2rem'; bug.style.left = Math.random()*(area.offsetWidth-40)+'px'; bug.style.top = Math.random()*(area.offsetHeight-40)+'px'; bug.style.cursor = 'pointer'; bug.onmousedown = function() { bugScore++; this.remove(); if(bugScore >= 5 * bugLevel) { bugLevel++; bugTimer+=5; } if(bugLevel > 3) endBugGame(true); updateBugUI(); playSound('click'); }; area.appendChild(bug); setTimeout(() => { if(bug.parentNode) bug.remove(); }, 1500); }
+        function updateBugUI() { document.getElementById('bug-score').innerText = bugScore; document.getElementById('bug-timer').innerText = bugTimer; document.getElementById('bug-level-indicator').innerText = bugLevel; }
+        function endBugGame(win) { clearInterval(bugInterval); clearInterval(spawnInterval); document.getElementById('bug-game-area').innerHTML = '<h3 class="text-center text-white mt-5 pt-5">' + (win ? "SYSTEM CLEANSED" : "SYSTEM OVERRUN") + '</h3>'; if(win) showCandyPrize(); else playSound('error'); setTimeout(() => { document.getElementById('bug-game-intro').style.display = 'flex'; document.getElementById('bug-game-area').style.display = 'none'; document.getElementById('bug-game-ui').style.display = 'none'; document.getElementById('bug-game-area').innerHTML = ''; }, 3000); }
 
-        function endBugGame(win = false) {
-            clearInterval(gameTimer);
-            clearInterval(spawnTimer);
-            gameArea.innerHTML = '';
-            
-            if (win) {
-                gameOverMsg.innerHTML = `<span class="text-success">🎉 You Win! You squashed ${score} bugs!</span>`;
-                triggerConfetti(gameOverMsg);
-            } else {
-                gameOverMsg.innerHTML = `<span class="text-danger">💀 Game Over! You ran out of time.</span>`;
-            }
-            
-            setTimeout(() => {
-                gameIntro.style.display = 'block';
-                gameArea.style.display = 'none';
-                gameUi.style.display = 'none';
-            }, 3000);
-        }
+        /* --- COGNITIVE SORT --- */
+        const sortTasks = [{t:"Boilerplate", cat:"ai"}, {t:"Empathy", cat:"human"}, {t:"Syntax", cat:"ai"}, {t:"Architecture", cat:"human"}, {t:"Tests", cat:"ai"}, {t:"Ethics", cat:"human"}];
+        let currentTaskIdx = 0; let sortScore = 0;
+        function startSortGame() { document.getElementById('sort-intro').style.display='none'; document.getElementById('sort-game-ui').style.display='block'; currentTaskIdx=0; sortScore=0; loadTask(); }
+        function loadTask() { if(currentTaskIdx >= sortTasks.length) { document.getElementById('current-task').innerText = `DONE: ${sortScore}/${sortTasks.length}`; document.getElementById('sort-feedback').innerHTML = "<span class='text-success'>Success!</span>"; if(sortScore === sortTasks.length) showCandyPrize(); setTimeout(() => { document.getElementById('sort-intro').style.display='block'; document.getElementById('sort-game-ui').style.display='none'; }, 2000); return; } document.getElementById('current-task').innerText = sortTasks[currentTaskIdx].t; document.getElementById('sort-feedback').innerText = ""; }
+        function sortTask(c) { if(currentTaskIdx >= sortTasks.length) return; if(c === sortTasks[currentTaskIdx].cat) { document.getElementById('sort-feedback').innerHTML = "<span class='text-success'>CORRECT</span>"; sortScore++; playSound('click'); } else { document.getElementById('sort-feedback').innerHTML = "<span class='text-danger'>INCORRECT</span>"; playSound('error'); } currentTaskIdx++; setTimeout(loadTask, 500); }
 
-        /* --- 5. TEXT SIMULATION --- */
-        function runSim(choice) {
-            document.getElementById('sim-start').style.display = 'none';
-            const res = document.getElementById('sim-result');
-            const reset = document.getElementById('sim-reset');
-            res.style.display = 'block';
-            reset.style.display = 'block';
+        /* --- DATA DEFENSE --- */
+        let defScore = 0; let defHealth = 100; let defInterval, scraperInterval;
+        function startDefenseGame() { document.getElementById('defense-intro').style.display='none'; defScore=0; defHealth=100; updateDefUI(); scraperInterval=setInterval(spawnScraper, 1000); defInterval=setInterval(() => { if(defHealth<=0) endDefenseGame(); }, 100); }
+        function spawnScraper() { const area = document.getElementById('defense-game-area'); const s = document.createElement('i'); s.className = 'fas fa-robot scraper'; s.style.left = Math.random()*(area.offsetWidth-30)+'px'; s.style.top = '0px'; s.onmousedown = function() { defScore++; this.remove(); updateDefUI(); playSound('click'); }; area.appendChild(s); let pos = 0; let fall = setInterval(() => { pos+=2; s.style.top=pos+'px'; if(pos>250) { clearInterval(fall); if(s.parentNode) { s.remove(); defHealth-=20; updateDefUI(); playSound('error'); } } }, 30); }
+        function updateDefUI() { document.getElementById('def-score').innerText = defScore; document.getElementById('def-health').innerText = defHealth + "%"; }
+        function endDefenseGame() { clearInterval(scraperInterval); clearInterval(defInterval); document.querySelectorAll('.scraper').forEach(el=>el.remove()); document.getElementById('defense-intro').style.display='flex'; document.querySelector('#defense-intro h5').innerText="GAME OVER"; if(defScore>5) showCandyPrize(); else playSound('error'); }
 
-            if (choice === 'full-ai') {
-                res.className = "mt-3 p-3 rounded bg-warning";
-                res.innerHTML = "<strong>Result:</strong> The code was generated in seconds! But wait... the login button doesn't work on mobile, and the database connection is insecure. You spend 3 days fixing it.";
-            } else if (choice === 'manual') {
-                res.className = "mt-3 p-3 rounded bg-info text-white";
-                res.innerHTML = "<strong>Result:</strong> The code is clean and works perfectly. However, it took you 5 days to write, and your boss is asking why it took so long.";
-            } else {
-                res.className = "mt-3 p-3 rounded bg-success text-white";
-                res.innerHTML = "<strong>Result: Perfect Balance!</strong> You wrote the secure logic yourself, and used AI to generate the boring HTML forms instantly. Project finished in 2 days with no bugs.";
-                triggerConfetti(res);
-            }
-        }
+        /* --- COURT --- */
+        function judgeCourt(v) { const res = document.getElementById('court-result'); document.getElementById('court-ui').style.display='none'; res.style.display='block'; if(v==='fair') { res.innerText="INCORRECT. Vincent (2022) notes similarity triggers lawsuits."; res.className="text-center mt-2 fw-bold text-danger small"; playSound('error'); } else { res.innerText="CORRECT. This code similarity is the basis of Doe v. GitHub."; res.className="text-center mt-2 fw-bold text-success small"; showCandyPrize(); } }
 
-        function resetSim() {
-            document.getElementById('sim-start').style.display = 'block';
-            document.getElementById('sim-result').style.display = 'none';
-            document.getElementById('sim-reset').style.display = 'none';
-        }
+        /* --- CONFETTI --- */
+        function triggerConfetti() { for(let i=0; i<50; i++) { const c = document.createElement('div'); c.style.position='fixed'; c.style.width='10px'; c.style.height='10px'; c.style.left=Math.random()*100+'vw'; c.style.top='-10px'; c.style.background=Math.random()>0.5?'#00f3ff':'#bc13fe'; c.style.zIndex='99999'; c.style.transition='top 1s ease-in'; document.body.appendChild(c); setTimeout(()=>{ c.style.top='110vh'; },10); setTimeout(()=>{ c.remove(); },1000); } }
 
-        /* --- 6. QUIZ & CONFETTI --- */
-        function checkQuiz(btn, qId, isCorrect) {
-            const parent = document.getElementById(qId);
-            const result = parent.querySelector('.result');
-            const allBtns = parent.querySelectorAll('button');
-            
-            allBtns.forEach(b => b.disabled = true); // Disable buttons
-
-            if (isCorrect) {
-                result.innerHTML = "✅ Correct!";
-                result.className = "result correct";
-                result.style.display = "block";
-                triggerConfetti(btn);
-            } else {
-                result.innerHTML = "❌ Incorrect. Try reading the section again.";
-                result.className = "result incorrect";
-                result.style.display = "block";
-            }
-        }
-
-        function triggerConfetti(element) {
-            const rect = element.getBoundingClientRect();
-            const center = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 };
-            
-            for(let i=0; i<40; i++) {
-                const conf = document.createElement('div');
-                conf.classList.add('confetti-piece');
-                conf.style.left = center.x + 'px';
-                conf.style.top = (center.y + window.scrollY) + 'px';
-                conf.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                
-                // Random physics
-                const angle = Math.random() * Math.PI * 2;
-                const velocity = 5 + Math.random() * 10;
-                const tx = Math.cos(angle) * 150;
-                const ty = Math.sin(angle) * 150;
-
-                conf.animate([
-                    { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
-                    { transform: `translate(${tx}px, ${ty}px) rotate(720deg)`, opacity: 0 }
-                ], {
-                    duration: 1000 + Math.random() * 1000,
-                    easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
-                }).onfinish = () => conf.remove();
-                
-                document.body.appendChild(conf);
-            }
-        }
+        /* --- QUIZ --- */
+        const QUIZ_QUESTIONS = [{q:"Purdue Study error rate?", a:["10%","52%","99%"], c:1}, {q:"Why users prefer AI?", a:["Short","Polite","Funny"], c:1}, {q:"Junior Trap?", a:["Low pay","No learning","Coffee"], c:1}, {q:"Hodges (2025) says AI lacks:", a:["Common Sense","Speed","Spelling"], c:0}, {q:"Siedsma (2024) error term:", a:["Bugs","Glitches","Hallucinations"], c:2}, {q:"Duranton (2024) job shift:", a:["Auditing","Typing","Gaming"], c:0}, {q:"Dryka (2025) IP risk:", a:["Private","Public Repos","Books"], c:1}, {q:"Levin (2025) usage %:", a:["10%","50-60%","100%"], c:1}, {q:"Vincent (2022) lawsuit:", a:["Roe v. Wade","Doe v. GitHub","State v. AI"], c:1}, {q:"Brookes (2023) analogy:", a:["Autopilot","Bike","Toaster"], c:0}, {q:"AI code is often:", a:["Concise","Verbose","Perfect"], c:1}, {q:"Human role:", a:["Pilot","Data Entry","Obsolete"], c:0}, {q:"100% AI code results in:", a:["Success","Tech Debt","Promotion"], c:1}, {q:"Juniors should use AI as:", a:["Solver","Tutor","God"], c:1}, {q:"Final Verdict:", a:["Replace","Tool","Useless"], c:1}];
+        let quizScore = 0;
+        function startQuiz() { document.getElementById('start-quiz-btn').style.display='none'; document.getElementById('quiz-container').style.display='block'; QUIZ_QUESTIONS.forEach((q,i) => { let h = `<div class="mb-4 fade-in-up visible"><h5 class="mb-3 text-primary">Q${i+1}: ${q.q}</h5>`; q.a.forEach((o,j) => { h += `<button class="quiz-btn interactive-hover" onclick="ans(this, ${i}, ${j})">${o}</button>`; }); h += `</div>`; document.getElementById('quiz-container').innerHTML+=h; }); }
+        function ans(b, i, j) { const c = QUIZ_QUESTIONS[i].c; b.parentElement.querySelectorAll('button').forEach(bt=>bt.disabled=true); if(j===c){ b.classList.add('correct'); quizScore++; playSound('click'); } else { b.classList.add('wrong'); playSound('error'); } document.getElementById('quiz-progress').style.width = ((i+1)/QUIZ_QUESTIONS.length)*100+"%"; if(i===QUIZ_QUESTIONS.length-1) setTimeout(showResults, 1000); }
+        function showResults() { document.getElementById('quiz-container').style.display='none'; document.getElementById('quiz-results').style.display='block'; document.getElementById('final-score').innerText = `${quizScore}/15`; let r="TRAINEE"; if(quizScore>12){r="MASTER ARCHITECT";showCandyPrize();} else if(quizScore>8)r="SENIOR DEV"; document.getElementById('final-rank').innerText = `RANK: ${r}`; }
     </script>
 </body>
 </html>
